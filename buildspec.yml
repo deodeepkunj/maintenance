@@ -1,0 +1,35 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "Installing dependencies..."
+      - npm install
+
+  pre_build:
+    commands:
+      - echo "Running tests..."
+      - npm run test:ci
+      - echo "Building application..."
+      - npm run build
+
+  build:
+    commands:
+      - echo "Build completed on `date`"
+
+artifacts:
+  files:
+    - "**/*"
+    - "!node_modules/**/*"
+  secondary-artifacts:
+    CodeDeployArtifact:
+      files:
+        - "**/*"
+        - "!.git/**/*"
+      name: deployment-artifact
+
+cache:
+  paths:
+    - node_modules/**/*
