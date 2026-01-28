@@ -1,33 +1,28 @@
-ersion: 0.0
-Resources:
-  - MaintenanceScreenApp:
-      Type: AWS::CloudFormation::Stack
-      Properties:
-        StackName: maintenance-screen-app
-        TemplateURL: https://maintenance-buket.s3.amazonaws.com/cf-template.json
+version: 0.0
+os: linux
 
-Hooks:
-  ApplicationStart:
-    - Location: scripts/maintenance-enable.sh
-      Timeout: 300
-      RunAs: root
-
-  ApplicationStop:
-    - Location: scripts/maintenance-disable.sh
-      Timeout: 300
-      RunAs: root
-
-  ValidateService:
-    - Location: scripts/validate-deployment.sh
-      Timeout: 300
-      RunAs: root
-
-Files:
+files:
   - source: /
     destination: /var/www/maintenance-screen
 
-Permissions:
+permissions:
   - object: /var/www/maintenance-screen
     pattern: "**"
     owner: ec2-user
     group: ec2-user
+
+hooks:
+  ApplicationStop:
+    - location: scripts/maintenance-enable.sh
+      timeout: 300
+      runas: root
+
+  AfterInstall:
+    - location: scripts/validate-deployment.sh
+      timeout: 300
+      runas: root
+
+  ApplicationStart:
+    - location: scripts/maintenance-disable.sh
+      timeout: 300
+      runas: root
