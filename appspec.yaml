@@ -4,7 +4,7 @@ Resources:
       Type: AWS::CloudFormation::Stack
       Properties:
         StackName: maintenance-screen-app
-        TemplateURL: https://your-bucket.s3.amazonaws.com/cf-template.json
+        TemplateURL: https://maintenance-buket.s3.amazonaws.com/cf-template.json
 
 Hooks:
   ApplicationStart:
